@@ -1,15 +1,29 @@
 import { Request, Response, NextFunction } from "express";
+import tarefasRepository from "../repositories/tarefasRepository";
+import Tarefa from "../models/tarefasModel";
 
-function pegarTarefas(req: Request, res: Response, next: NextFunction) {
-  res.send("listar todas as tarefas");
+async function pegarTarefas(req: Request, res: Response, next: NextFunction) {
+  const result = await tarefasRepository.getTarefas();
+  res.json(result);
 }
 
-function pegarTarefa(req: Request, res: Response, next: NextFunction) {
-  res.send("listar uma tarefa");
+async function pegarTarefa(req: Request, res: Response, next: NextFunction) {
+  const { id } = req.params;
+  let result = await tarefasRepository.getTarefa(parseInt(id));
+  const code = result ? 200 : 404;
+  res.status(code).json(result);
 }
 
-function criarTarefa(req: Request, res: Response, next: NextFunction) {
-  res.send("criar uma tarefa");
+async function criarTarefa(req: Request, res: Response, next: NextFunction) {
+  const tarefa = req.body as Tarefa;
+
+  try {
+    const result = await tarefasRepository.criarTarefa(tarefa);
+    return res.status(201).json(result);
+  } catch (error) {
+    console.log("Erro ao criar: ", error);
+    return res.status(400).json({ erro: "Dados invalidos" });
+  }
 }
 
 function atualizarTarefa(req: Request, res: Response, next: NextFunction) {

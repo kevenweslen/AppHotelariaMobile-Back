@@ -1,4 +1,4 @@
-class Tarefa {
+export default class Tarefa {
   id: number;
   nome: string;
   descricao: string;
