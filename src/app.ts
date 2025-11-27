@@ -9,6 +9,32 @@ app.use("/tarefas", routes)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // //exibição por query
 // app.get("/query", (req:Request, res:Response, next:NextFunction)=>{
 //   const nome = req.query.nome

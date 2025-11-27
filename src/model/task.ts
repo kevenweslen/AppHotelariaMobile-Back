@@ -1,4 +1,4 @@
-class task{
+export default class task{
   id: number;
   nome: string;
   descricao: string;
@@ -10,3 +10,4 @@ class task{
     this.descricao = descricao;
   }
 }
+
