@@ -53,6 +53,17 @@ test("PUT: /tarefas/1 = 200 (atualizar tarefa) ", async () => {
   expect(res.status).toBe(201);
 });
 
+test("POST: /tarefas = 400 (Erro Criar tarefa)", async () => {
+  const res = await fetch(URL_BASE, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({}),
+  });
+  expect(res.status).toBe(400);
+  const content = await res.json();
+  expect(content).toHaveProperty("erro", "dados incompletos");
+});
+
 test("DELETE: /tarefas/:id = 204", async () => {
   const res = await fetch(`${URL_BASE}/${tarefa_id}`, {
     method: "DELETE",
