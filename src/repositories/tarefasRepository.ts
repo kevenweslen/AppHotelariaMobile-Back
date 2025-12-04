@@ -9,7 +9,8 @@ async function getTarefas(): Promise<Tarefa[] | any> {
 }
 async function getTarefa(id: number): Promise<Tarefa | any> {
   return new Promise((resolve, reject) => {
-    return resolve(Tarefa);
+    const tarefa = listaDeTarefas.find(t => t.id === id);
+    return resolve(tarefa);
   });
 }
 
