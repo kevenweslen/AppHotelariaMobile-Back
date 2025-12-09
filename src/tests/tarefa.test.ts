@@ -19,7 +19,7 @@ test("GET: /tarefas = 200", async () => {
   expect(Array.isArray(body)).toBe(true);
 });
 
-test("POST: /tarefas = 201 (Criar tarefa) ", async () => {
+test("POST: /tarefas = 201 (Criar tarefa)", async () => {
   const res = await fetch(URL_BASE, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

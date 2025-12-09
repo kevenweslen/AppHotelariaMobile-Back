@@ -1,16 +1,24 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config()
 
-const JWT_SECRET = "senha_super_secreta";
+
+const JWT_SECRET = process.env.JWT_SECRET!;
 const DURATION = 60 * 60 * 24
 
-export function createJWT(){
-  const payload = {
-    id: 123,
-    nome: "matheus",
-    cargo: "cliente",
-  }
+export function createJWT(payload:object){
   return jwt.sign(payload, JWT_SECRET, {
     expiresIn: DURATION,
     algorithm: "HS256"
   })
+}
+
+export function verifyJWT(token:string){
+  return jwt.verify(token, JWT_SECRET, function(err: any, decoded){
+    if(err){
+      return undefined
+    }
+    return decoded
+  });
+
 }
