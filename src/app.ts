@@ -1,10 +1,10 @@
 import express from "express";
 import { Request, Response, NextFunction } from "express";
-import routes from "./routes/tarefasRoutes";
+import hendlerRouter from "./routes/router";
 
 const app = express();
 app.use(express.json());
-app.use("/tarefas", routes)
+app.use(hendlerRouter)
 
 
 
