@@ -1,7 +1,8 @@
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 dotenv.config();
-const connection = mysql.createPool({
+
+export const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     port: Number(process.env.DB_PORT),
@@ -26,5 +27,3 @@ function getSSLValues(){
     : undefined;
 }
 
-
-export default connection;
