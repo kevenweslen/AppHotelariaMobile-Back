@@ -6,7 +6,11 @@ dotenv.config()
 const JWT_SECRET = process.env.JWT_SECRET!;
 const DURATION = 60 * 60 * 24
 
-export function createJWT(payload:object){
+export function createJWT(data:object){
+  const payload = {
+    ...data,
+    iat: Math.floor(Date.now() / 1000)
+  }
   return jwt.sign(payload, JWT_SECRET, {
     expiresIn: DURATION,
     algorithm: "HS256"
