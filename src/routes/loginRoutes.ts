@@ -1,8 +1,9 @@
 import { Router } from "express";
 import loginController from "../controllers/loginController"
 
-const router = Router();
+const loginRouter = Router();
 
-router.get("/", loginController.criarLogin);
+loginRouter.post("/", loginController.criarLogin);
+// loginRouter.post("/cadastro", cadastroLogin.cadastrar)
 
-export default router;
+export default loginRouter;
