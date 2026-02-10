@@ -1,20 +1,17 @@
-const URL_base = "http://localhost:3000/api/login/cadastro";
+test("POST /cadastro → deve retornar 201 e um token JWT", async () => {
+  const payload = {
+    nome: "Matheus R Jesus",
+    cpf: "123456783333901222",
+    email: "matheus33333422@gmail.com",
+    senha: "12345678",
+    telefone: "3333"
+  };
 
-test("POST: /cadastro = 201", async () => {
-  const res = await fetch(URL_base, {
+  const res = await fetch("http://localhost:3000/api/login/cadastro", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      nome: "Matheus R Jesus",
-      cpf: "12345678901",
-      email: "matheus3422@gmail.com",
-      senha: "123",
-      telefone: "11999999999"
-    }),
+    body: JSON.stringify(payload),
   });
 
-    const text = await res.text();
-    console.log("Status:", res.status);
-    console.log("Corpo da resposta:", text);
-    expect(res.status).toBe(201);
+  expect(res.status).toBe(201);
 });

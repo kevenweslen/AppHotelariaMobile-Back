@@ -9,26 +9,37 @@ async function cadastro(req: Request, res: Response, next: NextFunction) {
     if (!email || !senha || !nome || !cpf || !telefone) {
         return res.status(400).json({ message: "Todos os campos são obrigatórios." });
     }
-    if (email.trim() === "" || senha.trim() === "") {
-        return res.status(401).json({ message: "Email e senha não pode ser vazio" });
-    }
-    try {
-        const result = await cadastroRepository.cadastrarCliente(nome, cpf, email, senha, telefone);
-        if (!result) { throw new Error("Erro ao cadastrar usuário"); }
 
-        //remover senha do objeto
+    if (email.trim() === "" || senha.trim() === "") {
+        return res.status(400).json({ message: "Email e senha não podem ser vazios." });
+    }
+
+    try {
+        // ← Aqui está a correção principal
+        const senhaHash = await gerarSenha(senha);
+
+        const result = await cadastroRepository.cadastrarCliente(
+            nome,
+            cpf,
+            email,
+            senhaHash,
+            telefone
+        );
+
+        if (!result) {
+            throw new Error("Erro ao cadastrar usuário");
+        }
+
         const { senha: _, ...usuario } = result;
 
-        //criar o token do usuario
         const token = createJWT({ usuario });
 
         return res.status(201).json({ token });
 
     } catch (error) {
-        console.log(error);
-        return res.status(402).json({ message: "Erro ao cadastrar usuário." });
+        console.error("Erro no cadastro:", error);
+        return res.status(500).json({ message: "Erro ao cadastrar usuário." });
     }
-};
-
+}
 
 export default { cadastro };
