@@ -11,6 +11,7 @@ const handlerRouter = Router();
 handlerRouter.use("/api/login", rotaLogin);
 
 handlerRouter.use("/api/consultar", rotaConsultar);
+handlerRouter.use("/api/reservas", rotaConsultar);
 
 
 handlerRouter.use("/jwt", (req, res) => {
