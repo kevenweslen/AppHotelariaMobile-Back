@@ -17,23 +17,24 @@ async function fazerPedido(data:any){
         return null;
     }
 }
-async function fazerReserva(idPedido:number, quarto:object){
-const sql = `
-INSERT INTO reservas (pedicos_id, quarto_id, data_inicio, data_fim) 
-VALUES (?, ?, ?, ?)
-`
-    try{
+async function fazerReserva(idPedido:number, quarto:any) {
+    const sql = `INSERT INTO reservas (pedido_id, quarto_id, data_inicio, data_fim) 
+    VALUES (?, ?, ?, ?)`
+
+    try {
         const [result] = await pool.query<ResultSetHeader>(sql, [
             idPedido,
             quarto.id,
-            quartod.dataInicio,
-            quarto.dataFim
+            quarto.dataInicio,
+            quarto.dataFim,
         ]);
+        // apenas retorna o ID do novo pedido
         return result.insertId;
-    } catch(err) {
-        console.error('erro ao criar reserva', err)
+    } catch (err) {
+        console.error('Erro ao reservar o quarto:', err);
         return null;
     }
+    
 }
  
 export default { fazerPedido, fazerReserva };

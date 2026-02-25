@@ -1,17 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import reservaRepositories from "../repositories/reservaRepositories";
-
-const function corrigirDataHora(data:string, hora:number) {
-    let novaData = new Date(data)
-    novaData.setHours(hora)
-}
+import { corrigirDataHora } from "../utils/dataHora";
 
 async function criarPedido (req:Request, res:Response, next:NextFunction){
-    const token = req.payload;
-    const [pagamento, quarto] = req.body;
+    const token = (req as any).payload;
+    const {pagamento, quartos} = req.body;
 
-    if(!token.id || !pagamento || !quarto){
-        return res.status(400).json{{erro: "Dados incompletos"}};
+    if(!token.id || !pagamento || !quartos){
+        return res.status(400).json({erro: "Dados incompletos"});
     }
 
     try{
@@ -25,7 +21,7 @@ async function criarPedido (req:Request, res:Response, next:NextFunction){
         }
 
         let result = [];
-        for(let q of quarto){
+        for(let q of quartos){
             q.dataInicio= corrigirDataHora(q.dataInicio, 14)
             q.dataFim= corrigirDataHora(q.dataFim, 12)
             const reservaID = await reservaRepositories.fazerReserva(pedidoID, q)

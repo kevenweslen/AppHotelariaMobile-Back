@@ -1,22 +1,14 @@
-test("GET /consultar → deve retornar 200 com quartos disponíveis", async () => {
-  const params = new URLSearchParams({
-    qtd: "2",
-    inicio: "2026-03-20",
-    fim: "2026-03-23"
-  });
-
-  // Tente essas variações uma por vez até passar
-  const url = `http://localhost:3000/api/consultar?${params.toString()}`; 
-  // const url = `http://localhost:3000/consultar?${params.toString()}`;
-  // const url = `http://localhost:3000/quartos/consultar?${params.toString()}`;
-
-  const res = await fetch(url, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
-
-  console.log("URL testada →", url);
-  console.log("Status recebido →", res.status);
-
-  expect(res.status).toBe(200);
-});
+test("POST: /api/quartosDisponiveis = 200", async()=>{
+    const resp = await fetch("http://localhost:3000/api/quartosDisponiveis",{
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            dataInicio:"11/02/2026",
+            dataFim:"12/02/2026",
+            quantidade:3
+        })
+    });
+    expect(resp.status).toBe(200);
+    const json = await resp.json()
+    console.log(json)
+})
