@@ -21,7 +21,7 @@ async function cadastrarLogin(dadosLogin:dadosLogin):Promise<Login|null>{
         dadosLogin.telefone,
         dadosLogin.email,
         dadosLogin.senha,
-    ]);
+    ]); 
     if (result.insertId){
         const resultado:Login  = {id:result.insertId, ...dadosLogin, cargo: "cliente"} as Login
         return resultado
