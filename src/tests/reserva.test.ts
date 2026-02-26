@@ -5,8 +5,8 @@ test("POST: /api/reserva = 200", async()=>{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            email: "keven@gmail.com",
-            senha: "123"}
+            email: "matheus33333422@gmail.com",
+            senha: "12345678"}
         )
     });
     expect(res.status).toBe(200);

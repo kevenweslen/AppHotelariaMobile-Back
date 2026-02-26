@@ -5,14 +5,15 @@ test("POST: /login = 200", async () => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: "matheus@gmail.com",
-      senha: "123"
+      email: "matheus33333422@gmail.com",
+      senha: "12345678"
     }),
   });
 
-  const text = await res.text();  
-  console.log("Status:", res.status);
-  console.log("Corpo da resposta:", text);
+  // const text = await res.text();  
+  // console.log("Status:", res.status);
+  // console.log("Corpo da resposta:", text);
 
   expect(res.status).toBe(200);
+  const json = await res.json();
 });

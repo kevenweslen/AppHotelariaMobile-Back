@@ -4,7 +4,7 @@ import cadastroController from "../controllers/cadastroController";
 
 const rotaLogin = Router();
 
-rotaLogin.post("/", loginController.login);
+rotaLogin.post("/", loginController.loginCliente);
 rotaLogin.post("/cadastro", cadastroController.cadastro);
 
 export default rotaLogin;
