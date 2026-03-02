@@ -1,45 +1,53 @@
-import { NextFunction, Request, Response } from "express";
-import cadastroRepository from "../repositories/cadastroRepository";
-import { createJWT } from "../utils/jwt";
-import { gerarSenha } from "../utils/senha";
+import {Request, Response, NextFunction} from "express"
+import reservaRespository from "../repositories/reservaRepositories";
+import {corrigirDataHora} from "../utils/dataHora";
 
-async function cadastro(req: Request, res: Response, next: NextFunction) {
-    const { email, senha, nome, cpf, telefone } = req.body;
 
-    if (!email || !senha || !nome || !cpf || !telefone) {
-        return res.status(400).json({ message: "Todos os campos são obrigatórios." });
-    }
+async function criarPedido(req:Request, res:Response, next:NextFunction) {
+    const token = (req as any).payload ;
+    const {pagamento, quartos} = req.body;
 
-    if (email.trim() === "" || senha.trim() === "") {
-        return res.status(400).json({ message: "Email e senha não podem ser vazios." });
+    if (!token.id || !pagamento || !quartos){
+        return res.status(400).json({erro: "Dados incompletos!"})
     }
 
     try {
-        // ← Aqui está a correção principal
-        const senhaHash = await gerarSenha(senha);
-
-        const result = await cadastroRepository.cadastrarCliente(
-            nome,
-            cpf,
-            email,
-            senhaHash,
-            telefone
-        );
-
-        if (!result) {
-            throw new Error("Erro ao cadastrar usuário");
+        const dadosPedido = {
+            cliente_id : token.id,
+            pagamento : pagamento
+        }
+        // criar o Pedido
+        const pedidoID = await reservaRespository.fazerPedido(dadosPedido);
+        if (!pedidoID){throw new Error("Erro ao criar o Pedido")}
+        
+        //criar a reserva para cada um dos quartos
+        let result = []
+        for (let q of quartos){
+            q.dataInicio = await corrigirDataHora(q.dataInicio, 14)
+            q.dataFim = await corrigirDataHora(q.dataFim, 12)
+            const reservaID = await reservaRespository.fazerReserva(pedidoID, q)
+            if (!reservaID){continue}
+            result.push({
+                ...q,
+                reservaID: reservaID,
+            })
         }
 
-        const { senha: _, ...usuario } = result;
+        res.status(200).json({
+            message:"Reserva feita com sucesso",
+            pedidoID: pedidoID,
+            reservas: result
+        })
 
-        const token = createJWT({ usuario });
-
-        return res.status(201).json({ token });
 
     } catch (error) {
-        console.error("Erro no cadastro:", error);
-        return res.status(500).json({ message: "Erro ao cadastrar usuário." });
+        console.error(error)
+        return res.status(400).json({erro: "Reserva não efetuada!"})
     }
+
 }
 
-export default { cadastro };
+
+export default{
+    criarPedido
+}

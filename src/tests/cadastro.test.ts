@@ -2,7 +2,7 @@ test("POST /cadastro → deve retornar 201 e um token JWT", async () => {
   const payload = {
     nome: "Keven",
     cpf: "111111111111",
-    email: "testeKeven@email.com",
+    email: "132@email.com", 
     senha: "123456",
     telefone: "11111111111"
   };
